@@ -55,9 +55,9 @@ const mode = useColorMode();
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem @click="mode = 'light'"> Light </DropdownMenuItem>
-              <DropdownMenuItem @click="mode = 'dark'"> Dark </DropdownMenuItem>
-              <DropdownMenuItem @click="mode = 'auto'"> System </DropdownMenuItem>
+              <DropdownMenuItem @click="mode = 'light'"> 明亮 </DropdownMenuItem>
+              <DropdownMenuItem @click="mode = 'dark'"> 黑暗 </DropdownMenuItem>
+              <DropdownMenuItem @click="mode = 'auto'"> 系统 </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
