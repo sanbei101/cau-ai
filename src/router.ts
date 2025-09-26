@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
-const Index = () => import('@/pages/index.vue');
-const routes = [{ path: '/', component: Index }];
+const Laundry = () => import('@/pages/laundry/Laundry.vue');
+const routes = [
+  { path: '/', component: Laundry },
+  { path: '/laundry', component: Laundry }
+];
 
 const router = createRouter({
   history: createWebHistory(),

@@ -7,6 +7,7 @@ type DeviceItem = {
   imei: string;
   floorCode: string;
   state: number;
+  reserveState: number;
   enableReserve: boolean;
   finishTime: string | null;
   deviceId: number;
@@ -39,4 +40,8 @@ async function GetLaundry(payload: payload) {
   return res;
 }
 
-export { GetLaundry };
+function isReservationSupported(device: DeviceItem): boolean {
+  return !(device.reserveState === 0 && device.state === 2);
+}
+
+export { GetLaundry, type DeviceItem, type payload, isReservationSupported };
