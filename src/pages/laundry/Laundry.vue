@@ -51,9 +51,15 @@
             {{ getStateText(device.state) }}
           </Badge>
         </div>
-        <div class="mt-3 text-sm">
-          <p>预约功能：{{ isReservationSupported(device) ? '支持' : '不支持' }}</p>
-          <p v-if="device.finishTime">预计完成：{{ formatTime(device.finishTime) }}</p>
+        <div class="mt-3 flex items-center">
+          <div class="flex-grow">
+            <p v-if="device.finishTime">
+              剩余时间：{{ getCountdown(device.finishTime, currentTime) }}
+            </p>
+          </div>
+          <Badge :variant="isReservationSupported(device) ? 'default' : 'outline'">
+            {{ isReservationSupported(device) ? '可预约' : '不可预约' }}
+          </Badge>
         </div>
       </Card>
     </div>
@@ -67,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, reactive, onUnmounted } from 'vue';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -80,7 +86,15 @@ import {
 } from '@/components/ui/select';
 import { Loader } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
-import { GetLaundry, type payload, type DeviceItem, isReservationSupported } from '@/api/laundry';
+import {
+  GetLaundry,
+  type payload,
+  type DeviceItem,
+  isReservationSupported,
+  getCountdown,
+  getStateText,
+  getBadgeVariant
+} from '@/api/laundry';
 
 const positions = [
   { id: 27958, name: '东校区三号公寓' },
@@ -93,7 +107,7 @@ const floors = Array.from({ length: 18 }, (_, i) => ({
   name: `${i + 1}楼`
 }));
 
-const form = ref<payload>({
+const form = reactive<payload>({
   positionId: 0,
   floorCode: '00',
   categoryCode: '00',
@@ -103,41 +117,19 @@ const form = ref<payload>({
 
 const devices = ref<DeviceItem[]>([]);
 const loading = ref(false);
-
-const getStateText = (state: number): string => {
-  switch (state) {
-    case 1:
-      return '空闲';
-    case 2:
-      return '运行中';
-    default:
-      return '未知状态';
-  }
-};
-
-const getBadgeVariant = (state: number): 'default' | 'secondary' | 'destructive' | 'outline' => {
-  if (state === 0) return 'secondary';
-  if (state === 1) return 'default';
-  if (state === 2) return 'destructive';
-  return 'outline';
-};
-
-const formatTime = (timeStr: string | null): string => {
-  if (!timeStr) return '';
-  return new Date(timeStr).toLocaleString('zh-CN');
-};
-
+const currentTime = ref(Date.now());
+const interval = setInterval(() => (currentTime.value = Date.now()), 1000);
 const handlePositionChange = () => {
-  form.value.floorCode = '00';
+  form.floorCode = '00';
   devices.value = [];
 };
 
 const fetchData = async () => {
-  if (!form.value.positionId || !form.value.floorCode) return;
+  if (!form.positionId || !form.floorCode) return;
 
   loading.value = true;
   try {
-    const res = await GetLaundry(form.value);
+    const res = await GetLaundry(form);
     devices.value = res.data.items;
   } catch (error) {
     console.error('获取设备失败:', error);
@@ -146,6 +138,7 @@ const fetchData = async () => {
     loading.value = false;
   }
 };
-
-onMounted(() => {});
+onUnmounted(() => {
+  clearInterval(interval);
+});
 </script>
