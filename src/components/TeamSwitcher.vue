@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Component } from "vue";
+import type { Component } from 'vue';
 
-import { ChevronsUpDown, Plus } from "lucide-vue-next";
-import { ref } from "vue";
+import { ChevronsUpDown, Plus } from 'lucide-vue-next';
+import { ref } from 'vue';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,15 +10,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
+  useSidebar
+} from '@/components/ui/sidebar';
 
 const props = defineProps<{
   teams: {
@@ -39,11 +39,9 @@ const activeTeam = ref(props.teams[0]!);
         <DropdownMenuTrigger as-child>
           <SidebarMenuButton
             size="lg"
-            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-          >
+            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
             <div
-              class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
-            >
+              class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
               <component :is="activeTeam.logo" class="size-4" />
             </div>
             <div class="grid flex-1 text-left text-sm leading-tight">
@@ -59,20 +57,14 @@ const activeTeam = ref(props.teams[0]!);
           class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg"
           align="start"
           :side="isMobile ? 'bottom' : 'right'"
-          :side-offset="4"
-        >
-          <DropdownMenuLabel class="text-xs text-muted-foreground">
-            Teams
-          </DropdownMenuLabel>
+          :side-offset="4">
+          <DropdownMenuLabel class="text-xs text-muted-foreground"> Teams </DropdownMenuLabel>
           <DropdownMenuItem
             v-for="(team, index) in teams"
             :key="team.name"
             class="gap-2 p-2"
-            @click="activeTeam = team"
-          >
-            <div
-              class="flex size-6 items-center justify-center rounded-sm border"
-            >
+            @click="activeTeam = team">
+            <div class="flex size-6 items-center justify-center rounded-sm border">
               <component :is="team.logo" class="size-4 shrink-0" />
             </div>
             {{ team.name }}
@@ -80,9 +72,7 @@ const activeTeam = ref(props.teams[0]!);
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem class="gap-2 p-2">
-            <div
-              class="flex size-6 items-center justify-center rounded-md border bg-background"
-            >
+            <div class="flex size-6 items-center justify-center rounded-md border bg-background">
               <Plus class="size-4" />
             </div>
             <div class="font-medium text-muted-foreground">Add team</div>

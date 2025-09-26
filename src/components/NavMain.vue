@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import type { LucideIcon } from "lucide-vue-next";
-import { ChevronRight } from "lucide-vue-next";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import type { LucideIcon } from 'lucide-vue-next';
+import { ChevronRight } from 'lucide-vue-next';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -14,8 +10,8 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
+  SidebarMenuSubItem
+} from '@/components/ui/sidebar';
 
 defineProps<{
   items: {
@@ -29,7 +25,7 @@ defineProps<{
     }[];
   }[];
 }>();
-import { RouterLink } from "vue-router";
+import { RouterLink } from 'vue-router';
 </script>
 
 <template>
@@ -41,24 +37,19 @@ import { RouterLink } from "vue-router";
         :key="item.title"
         as-child
         :default-open="item.isActive"
-        class="group/collapsible"
-      >
+        class="group/collapsible">
         <SidebarMenuItem>
           <CollapsibleTrigger as-child>
             <SidebarMenuButton :tooltip="item.title">
               <component :is="item.icon" v-if="item.icon" />
               <span>{{ item.title }}</span>
               <ChevronRight
-                class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
-              />
+                class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
             </SidebarMenuButton>
           </CollapsibleTrigger>
           <CollapsibleContent>
             <SidebarMenuSub>
-              <SidebarMenuSubItem
-                v-for="subItem in item.items"
-                :key="subItem.title"
-              >
+              <SidebarMenuSubItem v-for="subItem in item.items" :key="subItem.title">
                 <SidebarMenuSubButton as-child>
                   <RouterLink :to="subItem.url">
                     <span>{{ subItem.title }}</span>
