@@ -24,14 +24,15 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-
-const props = defineProps<{
+type props = {
   user: {
     name: string;
     email: string;
     avatar: string;
   };
-}>();
+};
+
+const { user } = defineProps<props>();
 
 const { isMobile } = useSidebar();
 </script>
