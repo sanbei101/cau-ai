@@ -2,10 +2,8 @@
 import type { SidebarProps } from "@/components/ui/sidebar";
 
 import {
-  AudioWaveform,
   BookOpen,
   Bot,
-  Command,
   Frame,
   GalleryVerticalEnd,
   Map,
@@ -39,19 +37,9 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "农大AI平台",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
     },
   ],
   navMain: [

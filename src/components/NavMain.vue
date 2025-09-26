@@ -29,6 +29,7 @@ defineProps<{
     }[];
   }[];
 }>();
+import { RouterLink } from "vue-router";
 </script>
 
 <template>
@@ -59,9 +60,9 @@ defineProps<{
                 :key="subItem.title"
               >
                 <SidebarMenuSubButton as-child>
-                  <a :href="subItem.url">
+                  <RouterLink :to="subItem.url">
                     <span>{{ subItem.title }}</span>
-                  </a>
+                  </RouterLink>
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             </SidebarMenuSub>
