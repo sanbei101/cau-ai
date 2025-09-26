@@ -39,91 +39,45 @@ const data = {
     {
       name: "农大AI平台",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      plan: "AI",
     },
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "生活便利",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "洗衣",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "食堂",
           url: "#",
         },
         {
-          title: "Settings",
+          title: "快递",
           url: "#",
         },
       ],
     },
     {
-      title: "Models",
+      title: "课程学习",
       url: "#",
       icon: Bot,
       items: [
         {
-          title: "Genesis",
+          title: "查成绩",
           url: "#",
         },
         {
-          title: "Explorer",
+          title: "课标",
           url: "#",
         },
         {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "地点查询",
           url: "#",
         },
       ],
@@ -131,17 +85,17 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "资料下载",
       url: "#",
       icon: Frame,
     },
     {
-      name: "Sales & Marketing",
+      name: "选课助手",
       url: "#",
       icon: PieChart,
     },
     {
-      name: "Travel",
+      name: "常识集合",
       url: "#",
       icon: Map,
     },
