@@ -10,6 +10,7 @@ type DeviceItem = {
   reserveState: number;
   enableReserve: boolean;
   finishTime: string | null;
+  finishTimeTimestamp: number | null;
   deviceId: number;
 };
 
@@ -43,11 +44,9 @@ async function GetLaundry(payload: payload) {
 function isReservationSupported(device: DeviceItem): boolean {
   return !(device.reserveState === 0 && device.state === 2);
 }
-const getCountdown = (finishTime: string, nowTime: number): string => {
+const getCountdown = (finishTime: number | null, nowTime: number): string => {
   if (!finishTime) return '';
-  const finish = new Date(finishTime).getTime();
-  const now = nowTime;
-  const diff = finish - now;
+  const diff = finishTime - nowTime;
   if (diff <= 0) {
     return '已完成';
   }

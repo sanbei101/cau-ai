@@ -54,7 +54,7 @@
         <div class="mt-3 flex items-center">
           <div class="flex-grow">
             <p v-if="device.finishTime">
-              剩余时间：{{ getCountdown(device.finishTime, currentTime) }}
+              剩余时间：{{ getCountdown(device.finishTimeTimestamp, currentTime) }}
             </p>
           </div>
           <Badge :variant="isReservationSupported(device) ? 'default' : 'outline'">
@@ -126,11 +126,13 @@ const handlePositionChange = () => {
 
 const fetchData = async () => {
   if (!form.positionId || !form.floorCode) return;
-
   loading.value = true;
   try {
     const res = await GetLaundry(form);
-    devices.value = res.data.items;
+    devices.value = res.data.items.map((item) => ({
+      ...item,
+      finishTimeTimestamp: item.finishTime ? new Date(item.finishTime).getTime() : null
+    }));
   } catch (error) {
     console.error('获取设备失败:', error);
     devices.value = [];
