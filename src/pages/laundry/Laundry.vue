@@ -88,12 +88,12 @@ import { Loader } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import {
   GetLaundry,
-  type payload,
-  type DeviceItem,
   isReservationSupported,
   getCountdown,
   getStateText,
-  getBadgeVariant
+  getBadgeVariant,
+  type payload,
+  type DeviceItem
 } from '@/api/laundry';
 
 const positions = [

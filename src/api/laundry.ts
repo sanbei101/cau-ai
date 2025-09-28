@@ -75,8 +75,8 @@ function getStateText(state: number): string {
   }
 }
 function getBadgeVariant(state: number): 'default' | 'outline' {
-  if (state === 1) return 'default';
-  if (state === 2) return 'outline';
+  if (state === 1) return 'outline';
+  if (state === 2) return 'default';
   return 'outline';
 }
 export {
