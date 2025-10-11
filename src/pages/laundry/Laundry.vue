@@ -108,13 +108,13 @@
             </CardHeader>
             <CardContent class="pt-0">
               <div class="space-y-3">
-                <div v-if="device.finishTime" class="flex items-center justify-between">
+                <div v-if="device.finishTimeTimestamp" class="flex items-center justify-between">
                   <div class="flex items-center gap-2">
                     <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
                     <span class="text-sm font-medium">剩余时间</span>
                   </div>
                   <span class="text-sm font-mono bg-muted px-2 py-1 rounded">
-                    {{ getCountdown(device.finishTime, currentTime) }}
+                    {{ getCountdown(device.finishTimeTimestamp, currentTime) }}
                   </span>
                 </div>
                 <div class="flex items-center justify-between pt-2 border-t">
