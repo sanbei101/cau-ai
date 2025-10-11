@@ -6,7 +6,7 @@ type DeviceItem = {
   name: string;
   imei: string;
   floorCode: string;
-  state: number;
+  state: number; // 1: 空闲, 2: 运行中
   reserveState: number;
   enableReserve: boolean;
   finishTime: string | null;
