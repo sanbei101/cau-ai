@@ -57,29 +57,41 @@
 
     <div v-if="devices.length > 0 && !loading" class="space-y-6">
       <!-- 统计卡片 -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card class="text-center">
-          <CardContent class="p-4">
-            <div class="text-2xl font-bold text-primary">{{ deviceStats.total }}</div>
-            <div class="text-sm text-muted-foreground">总设备数</div>
+      <div class="grid grid-cols-4 gap-4">
+        <Card
+          class="text-center border-zinc-200 bg-zinc-50/50 dark:bg-zinc-950/30 dark:border-zinc-800">
+          <CardContent class="p-1">
+            <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-400">
+              {{ deviceStats.total }}
+            </div>
+            <div class="text-sm text-zinc-600 dark:text-zinc-300">总设备数</div>
           </CardContent>
         </Card>
-        <Card class="text-center border-green-200 bg-green-50/50">
-          <CardContent class="p-4">
-            <div class="text-2xl font-bold text-green-600">{{ deviceStats.available }}</div>
-            <div class="text-sm text-green-700">可用设备</div>
+        <Card
+          class="text-center border-zinc-200 bg-zinc-50/50 dark:bg-zinc-950/30 dark:border-zinc-800">
+          <CardContent class="p-1">
+            <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-400">
+              {{ deviceStats.available }}
+            </div>
+            <div class="text-sm text-zinc-600 dark:text-zinc-300">可用设备</div>
           </CardContent>
         </Card>
-        <Card class="text-center border-orange-200 bg-orange-50/50">
-          <CardContent class="p-4">
-            <div class="text-2xl font-bold text-orange-600">{{ deviceStats.inUse }}</div>
-            <div class="text-sm text-orange-700">使用中</div>
+        <Card
+          class="text-center border-zinc-200 bg-zinc-50/50 dark:bg-zinc-950/30 dark:border-zinc-800">
+          <CardContent class="p-1">
+            <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-400">
+              {{ deviceStats.inUse }}
+            </div>
+            <div class="text-sm text-zinc-600 dark:text-zinc-300">使用中</div>
           </CardContent>
         </Card>
-        <Card class="text-center border-blue-200 bg-blue-50/50">
-          <CardContent class="p-4">
-            <div class="text-2xl font-bold text-blue-600">{{ deviceStats.reserved }}</div>
-            <div class="text-sm text-blue-700">已预约</div>
+        <Card
+          class="text-center border-zinc-200 bg-zinc-50/50 dark:bg-zinc-950/30 dark:border-zinc-800">
+          <CardContent class="p-1">
+            <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-400">
+              {{ deviceStats.reserved }}
+            </div>
+            <div class="text-sm text-zinc-600 dark:text-zinc-300">已预约</div>
           </CardContent>
         </Card>
       </div>
