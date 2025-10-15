@@ -1,0 +1,3 @@
+cau-ai-backend.sanebei101.xyz {
+    reverse_proxy localhost:8000
+}

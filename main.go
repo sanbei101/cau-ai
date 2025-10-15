@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	handle.InitDish()
+	// handle.InitDish()
 	router := handle.InitRouter()
 	router.Run(":8000")
 }
