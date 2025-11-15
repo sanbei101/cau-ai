@@ -27,7 +27,7 @@ const mode = useColorMode();
     <AppSidebar />
     <SidebarInset>
       <header
-        class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
         <div class="flex items-center gap-2 px-4 w-full">
           <SidebarTrigger class="-ml-1 cursor-pointer" />
           <Separator orientation="vertical" class="mr-2 h-4" />
