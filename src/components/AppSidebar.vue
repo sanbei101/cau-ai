@@ -42,11 +42,11 @@ const data = {
       items: [
         {
           title: '洗衣',
-          url: '#'
+          url: '/laundry'
         },
         {
           title: '食堂',
-          url: '#'
+          url: '/food'
         },
         {
           title: '快递',
