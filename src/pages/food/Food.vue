@@ -21,6 +21,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
+  Pagination,
+  PaginationContent,
   PaginationEllipsis,
   PaginationItem,
   PaginationNext,
@@ -30,7 +32,6 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   getDishList,
   type Dish,
-  type DishListParams,
   getAvailableTags,
   getAvailableCanteens,
   filterDishes
@@ -40,8 +41,8 @@ const dishes = ref<Dish[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 const searchQuery = ref('');
-const selectedTag = ref<string>('');
-const selectedCanteen = ref<string>('');
+const selectedTag = ref<string>('all');
+const selectedCanteen = ref<string>('all');
 
 const currentPage = ref(1);
 const pageSize = ref(12);
@@ -53,12 +54,12 @@ const fetchDishes = async () => {
     loading.value = true;
     error.value = null;
 
-    const params: DishListParams = {
+    const params = {
       page: currentPage.value,
       page_size: pageSize.value,
       search: searchQuery.value || undefined,
-      tag: selectedTag.value || undefined,
-      canteen: selectedCanteen.value || undefined
+      tag: selectedTag.value !== 'all' ? selectedTag.value : undefined,
+      canteen: selectedCanteen.value !== 'all' ? selectedCanteen.value : undefined
     };
 
     const response = await getDishList(params);
@@ -76,13 +77,18 @@ const availableTags = computed(() => getAvailableTags(dishes.value));
 const availableCanteens = computed(() => getAvailableCanteens(dishes.value));
 
 const filteredDishes = computed(() => {
-  return filterDishes(dishes.value, selectedTag.value, selectedCanteen.value, searchQuery.value);
+  return filterDishes(
+    dishes.value,
+    selectedTag.value !== 'all' ? selectedTag.value : undefined,
+    selectedCanteen.value !== 'all' ? selectedCanteen.value : undefined,
+    searchQuery.value
+  );
 });
 
 const resetFilters = () => {
   searchQuery.value = '';
-  selectedTag.value = '';
-  selectedCanteen.value = '';
+  selectedTag.value = 'all';
+  selectedCanteen.value = 'all';
   currentPage.value = 1;
 };
 
@@ -129,6 +135,9 @@ const formatCanteens = (canteens: string[]) => {
 };
 
 const getPaginationText = () => {
+  if (totalItems.value === 0) {
+    return '显示 0 项，共 0 项';
+  }
   const start = (currentPage.value - 1) * pageSize.value + 1;
   const end = Math.min(currentPage.value * pageSize.value, totalItems.value);
   return `显示 ${start}-${end} 项，共 ${totalItems.value} 项`;
@@ -168,7 +177,7 @@ onMounted(() => {
               <SelectValue placeholder="选择标签" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">全部标签</SelectItem>
+              <SelectItem value="all">全部标签</SelectItem>
               <SelectItem v-for="tag in availableTags" :key="tag" :value="tag">
                 {{ tag }}
               </SelectItem>
@@ -180,7 +189,7 @@ onMounted(() => {
               <SelectValue placeholder="选择食堂" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">全部食堂</SelectItem>
+              <SelectItem value="all">全部食堂</SelectItem>
               <SelectItem v-for="canteen in availableCanteens" :key="canteen" :value="canteen">
                 {{ canteen }}
               </SelectItem>
@@ -259,49 +268,62 @@ onMounted(() => {
           {{ getPaginationText() }}
         </div>
 
-        <div class="flex items-center gap-1">
-          <PaginationPrevious
-            @click="goToPreviousPage"
-            :disabled="currentPage <= 1"
-            class="gap-1 pl-2.5">
-            <ChevronLeftIcon class="h-4 w-4" />
-            <span class="hidden sm:block">上一页</span>
-          </PaginationPrevious>
+        <Pagination
+          v-if="totalPages > 0"
+          :total="totalItems"
+          :items-per-page="pageSize"
+          :page="currentPage"
+          @update:page="(page) => goToPage(page)"
+          class="w-fit"
+        >
+          <PaginationContent>
+            <PaginationPrevious
+              @click="goToPreviousPage"
+              :disabled="currentPage <= 1"
+            >
+              <ChevronLeftIcon />
+              <span class="hidden sm:block">上一页</span>
+            </PaginationPrevious>
 
-          <template v-for="page in totalPages" :key="page">
-            <PaginationItem
-              v-if="
-                page === 1 ||
-                page === totalPages ||
-                (page >= currentPage - 1 && page <= currentPage + 1)
-              "
-              :value="page">
-              <Button
-                :variant="page === currentPage ? 'default' : 'outline'"
-                size="sm"
-                @click="goToPage(page)"
-                class="h-8 w-8 p-0">
-                {{ page }}
-              </Button>
-            </PaginationItem>
-            <PaginationItem
-              v-else-if="
-                (page === currentPage - 2 && currentPage > 3) ||
-                (page === currentPage + 2 && currentPage < totalPages - 2)
-              "
-              :value="page">
-              <PaginationEllipsis />
-            </PaginationItem>
-          </template>
+            <template v-for="page in totalPages" :key="page">
+              <PaginationItem
+                v-if="
+                  page === 1 ||
+                  page === totalPages ||
+                  (page >= currentPage - 1 && page <= currentPage + 1)
+                "
+                :value="page"
+                :isActive="page === currentPage"
+              >
+                <Button
+                  :variant="page === currentPage ? 'default' : 'outline'"
+                  size="sm"
+                  @click="goToPage(page)"
+                  class="h-8 w-8 p-0"
+                >
+                  {{ page }}
+                </Button>
+              </PaginationItem>
+              <PaginationItem
+                v-else-if="
+                  (page === currentPage - 2 && currentPage > 3) ||
+                  (page === currentPage + 2 && currentPage < totalPages - 2)
+                "
+                :value="page"
+              >
+                <PaginationEllipsis />
+              </PaginationItem>
+            </template>
 
-          <PaginationNext
-            @click="goToNextPage"
-            :disabled="currentPage >= totalPages"
-            class="gap-1 pr-2.5">
-            <span class="hidden sm:block">下一页</span>
-            <ChevronRightIcon class="h-4 w-4" />
-          </PaginationNext>
-        </div>
+            <PaginationNext
+              @click="goToNextPage"
+              :disabled="currentPage >= totalPages"
+            >
+              <span class="hidden sm:block">下一页</span>
+              <ChevronRightIcon />
+            </PaginationNext>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
 

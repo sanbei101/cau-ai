@@ -1,6 +1,4 @@
-import alovaInstance from '@/api/alova';
-
-const API_BASE_URL = 'https://cau-ai-backend.sanbei101.xyz';
+import { parse } from 'papaparse';
 
 export interface Dish {
   id: string;
@@ -9,7 +7,7 @@ export interface Dish {
   canteen: string[];
 }
 
-export interface DishListResponse {
+export type DishListResponse = {
   code: number;
   message: string;
   data: {
@@ -18,36 +16,73 @@ export interface DishListResponse {
     page: number;
     page_size: number;
   };
+};
+
+async function loadDishesFromCSV(): Promise<Dish[]> {
+  const response = await fetch('/data/dishs.csv');
+  const csvText = await response.text();
+
+  return new Promise((resolve, reject) => {
+    parse(csvText, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        if (results.errors.length > 0) {
+          console.warn('CSV 解析警告:', results.errors);
+        }
+
+        const dishes: Dish[] = results.data
+          .map((row: any, index: number) => ({
+            id: `dish_${index}`,
+            name: row['菜品名称']?.trim() || '',
+            tag: row['标签']?.trim() || '',
+            canteen: row['食堂'] ? [row['食堂'].trim()] : [] // 转为数组
+          }))
+          .filter((dish) => dish.name);
+
+        resolve(dishes);
+      },
+      error: (error: any) => {
+        reject(new Error(`CSV 解析失败: ${error.message}`));
+      }
+    });
+  });
 }
 
-export interface DishListParams {
-  page?: number;
-  page_size?: number;
-  tag?: string;
-  canteen?: string;
-  search?: string;
-}
+export async function getDishList(
+  params: {
+    page?: number;
+    page_size?: number;
+    tag?: string;
+    canteen?: string;
+    search?: string;
+  } = {}
+): Promise<DishListResponse> {
+  const allDishes = await loadDishesFromCSV();
 
-export async function getDishList(params: DishListParams = {}): Promise<DishListResponse> {
-  const queryParams = new URLSearchParams();
+  let filtered = allDishes.filter((dish) => {
+    if (params.tag && dish.tag !== params.tag) return false;
+    if (params.canteen && !dish.canteen.includes(params.canteen)) return false;
+    if (params.search && !dish.name.toLowerCase().includes(params.search.toLowerCase()))
+      return false;
+    return true;
+  });
 
-  if (params.page) queryParams.append('page', params.page.toString());
-  if (params.page_size) queryParams.append('page_size', params.page_size.toString());
-  if (params.tag) queryParams.append('tag', params.tag);
-  if (params.canteen) queryParams.append('canteen', params.canteen);
-  if (params.search) queryParams.append('search', params.search);
+  const page = params.page ?? 1;
+  const pageSize = params.page_size ?? 20;
+  const startIndex = (page - 1) * pageSize;
+  const paginatedData = filtered.slice(startIndex, startIndex + pageSize);
 
-  const url = `${API_BASE_URL}/api/dish/list${
-    queryParams.toString() ? `?${queryParams.toString()}` : ''
-  }`;
-
-  const res = await alovaInstance.Get<DishListResponse>(url);
-
-  if (res.code !== 200) {
-    throw new Error(res.message || 'Failed to fetch dish list');
-  }
-
-  return res;
+  return {
+    code: 200,
+    message: 'success',
+    data: {
+      list: paginatedData,
+      total: filtered.length,
+      page,
+      page_size: pageSize
+    }
+  };
 }
 
 export function getAvailableTags(dishes: Dish[]): string[] {
