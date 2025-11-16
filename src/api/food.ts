@@ -20,6 +20,9 @@ export type DishListResponse = {
 
 async function loadDishesFromCSV(): Promise<Dish[]> {
   const response = await fetch('/data/dishs.csv');
+  if (!response.ok) {
+    throw new Error(`Failed to load CSV: ${response.statusText}`);
+  }
   const csvText = await response.text();
 
   return new Promise((resolve, reject) => {
@@ -30,16 +33,17 @@ async function loadDishesFromCSV(): Promise<Dish[]> {
         if (results.errors.length > 0) {
           console.warn('CSV 解析警告:', results.errors);
         }
+        const dishes: Dish[] = results.data.map((row: any, index: number) => {
+          const canteenRaw = row['食堂']?.toString().trim() || '';
+          const canteenList = canteenRaw.split(',');
 
-        const dishes: Dish[] = results.data
-          .map((row: any, index: number) => ({
+          return {
             id: `dish_${index}`,
-            name: row['菜品名称']?.trim() || '',
-            tag: row['标签']?.trim() || '',
-            canteen: row['食堂'] ? [row['食堂'].trim()] : [] // 转为数组
-          }))
-          .filter((dish) => dish.name);
-
+            name: row['菜品名称']?.toString() || '',
+            tag: row['标签']?.toString() || '',
+            canteen: canteenList
+          };
+        });
         resolve(dishes);
       },
       error: (error: any) => {
