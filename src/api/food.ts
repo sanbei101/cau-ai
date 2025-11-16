@@ -85,14 +85,12 @@ export async function getDishList(
   };
 }
 
-export function getAvailableTags(dishes: Dish[]): string[] {
-  const tags = new Set(dishes.map((dish) => dish.tag));
-  return Array.from(tags).sort();
+export function getAvailableTags(): string[] {
+  return ['主食', '小吃', '早餐'];
 }
 
-export function getAvailableCanteens(dishes: Dish[]): string[] {
-  const canteens = new Set(dishes.flatMap((dish) => dish.canteen));
-  return Array.from(canteens).sort();
+export function getAvailableCanteens(): string[] {
+  return ['公一食堂', '公二食堂', '公三食堂', '研二食堂', '清真食堂'];
 }
 
 export function filterDishes(

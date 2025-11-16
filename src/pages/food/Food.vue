@@ -73,8 +73,8 @@ const fetchDishes = async () => {
   }
 };
 
-const availableTags = computed(() => getAvailableTags(dishes.value));
-const availableCanteens = computed(() => getAvailableCanteens(dishes.value));
+const availableTags = getAvailableTags();
+const availableCanteens = getAvailableCanteens();
 
 const filteredDishes = computed(() => {
   return filterDishes(
