@@ -226,7 +226,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-else-if="filteredDishes.length > 0">
+    <div v-else-if="filteredDishes.length">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         <Card
           v-for="dish in filteredDishes"
@@ -274,13 +274,9 @@ onMounted(() => {
           :items-per-page="pageSize"
           :page="currentPage"
           @update:page="(page) => goToPage(page)"
-          class="w-fit"
-        >
+          class="w-fit">
           <PaginationContent>
-            <PaginationPrevious
-              @click="goToPreviousPage"
-              :disabled="currentPage <= 1"
-            >
+            <PaginationPrevious @click="goToPreviousPage" :disabled="currentPage <= 1">
               <ChevronLeftIcon />
               <span class="hidden sm:block">上一页</span>
             </PaginationPrevious>
@@ -293,14 +289,12 @@ onMounted(() => {
                   (page >= currentPage - 1 && page <= currentPage + 1)
                 "
                 :value="page"
-                :isActive="page === currentPage"
-              >
+                :isActive="page === currentPage">
                 <Button
                   :variant="page === currentPage ? 'default' : 'outline'"
                   size="sm"
                   @click="goToPage(page)"
-                  class="h-8 w-8 p-0"
-                >
+                  class="h-8 w-8 p-0">
                   {{ page }}
                 </Button>
               </PaginationItem>
@@ -309,16 +303,12 @@ onMounted(() => {
                   (page === currentPage - 2 && currentPage > 3) ||
                   (page === currentPage + 2 && currentPage < totalPages - 2)
                 "
-                :value="page"
-              >
+                :value="page">
                 <PaginationEllipsis />
               </PaginationItem>
             </template>
 
-            <PaginationNext
-              @click="goToNextPage"
-              :disabled="currentPage >= totalPages"
-            >
+            <PaginationNext @click="goToNextPage" :disabled="currentPage >= totalPages">
               <span class="hidden sm:block">下一页</span>
               <ChevronRightIcon />
             </PaginationNext>

@@ -1,11 +1,17 @@
 import { parse } from 'papaparse';
 
-export interface Dish {
+export type Dish = {
   id: string;
   name: string;
   tag: string;
   canteen: string[];
-}
+};
+
+type dishRow = {
+  name: string;
+  tag: string;
+  canteen: string;
+};
 
 export type DishListResponse = {
   code: number;
@@ -25,31 +31,21 @@ async function loadDishesFromCSV(): Promise<Dish[]> {
   }
   const csvText = await response.text();
 
-  return new Promise((resolve, reject) => {
-    parse(csvText, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        if (results.errors.length > 0) {
-          console.warn('CSV 解析警告:', results.errors);
-        }
-        const dishes: Dish[] = results.data.map((row: any, index: number) => {
-          const canteenRaw = row['食堂']?.toString().trim() || '';
-          const canteenList = canteenRaw.split(',');
-
-          return {
-            id: `dish_${index}`,
-            name: row['菜品名称']?.toString() || '',
-            tag: row['标签']?.toString() || '',
-            canteen: canteenList
-          };
-        });
-        resolve(dishes);
-      },
-      error: (error: any) => {
-        reject(new Error(`CSV 解析失败: ${error.message}`));
-      }
-    });
+  const { data, errors } = parse<dishRow>(csvText, {
+    header: true,
+    skipEmptyLines: true
+  });
+  if (errors.length) {
+    console.warn('CSV 解析警告:', errors);
+  }
+  return data.map((row: dishRow, index: number) => {
+    const canteenRaw = row.canteen.split(',');
+    return {
+      id: `dish_${index}`,
+      name: row.name,
+      tag: row.tag,
+      canteen: canteenRaw
+    };
   });
 }
 
