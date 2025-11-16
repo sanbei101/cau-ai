@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
-import { Search, Filter, Utensils, ChevronLeftIcon, ChevronRightIcon, AlertCircle } from 'lucide-vue-next';
+import {
+  Search,
+  Filter,
+  Utensils,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  AlertCircle
+} from 'lucide-vue-next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
@@ -17,7 +24,7 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationNext,
-  PaginationPrevious,
+  PaginationPrevious
 } from '@/components/ui/pagination';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
@@ -127,7 +134,6 @@ const getPaginationText = () => {
   return `显示 ${start}-${end} 项，共 ${totalItems.value} 项`;
 };
 
-
 onMounted(() => {
   fetchDishes();
 });
@@ -196,10 +202,10 @@ onMounted(() => {
     </div>
 
     <div v-else-if="error" class="flex justify-center py-12">
-      <div class="w-full max-w-md">
+      <div class="w-full">
         <Alert variant="destructive" class="mb-4">
           <AlertCircle />
-          <AlertDescription>
+          <AlertDescription class="font-bold">
             {{ error }}
           </AlertDescription>
         </Alert>
@@ -254,53 +260,48 @@ onMounted(() => {
         </div>
 
         <div class="flex items-center gap-1">
-        <PaginationPrevious
-          @click="goToPreviousPage"
-          :disabled="currentPage <= 1"
-          class="gap-1 pl-2.5"
-        >
-          <ChevronLeftIcon class="h-4 w-4" />
-          <span class="hidden sm:block">上一页</span>
-        </PaginationPrevious>
+          <PaginationPrevious
+            @click="goToPreviousPage"
+            :disabled="currentPage <= 1"
+            class="gap-1 pl-2.5">
+            <ChevronLeftIcon class="h-4 w-4" />
+            <span class="hidden sm:block">上一页</span>
+          </PaginationPrevious>
 
-        <template v-for="page in totalPages" :key="page">
-          <PaginationItem
-            v-if="
-              page === 1 ||
-              page === totalPages ||
-              (page >= currentPage - 1 && page <= currentPage + 1)
-            "
-            :value="page"
-          >
-            <Button
-              :variant="page === currentPage ? 'default' : 'outline'"
-              size="sm"
-              @click="goToPage(page)"
-              class="h-8 w-8 p-0"
-            >
-              {{ page }}
-            </Button>
-          </PaginationItem>
-          <PaginationItem
-            v-else-if="
-              (page === currentPage - 2 && currentPage > 3) ||
-              (page === currentPage + 2 && currentPage < totalPages - 2)
-            "
-            :value="page"
-          >
-            <PaginationEllipsis />
-          </PaginationItem>
-        </template>
+          <template v-for="page in totalPages" :key="page">
+            <PaginationItem
+              v-if="
+                page === 1 ||
+                page === totalPages ||
+                (page >= currentPage - 1 && page <= currentPage + 1)
+              "
+              :value="page">
+              <Button
+                :variant="page === currentPage ? 'default' : 'outline'"
+                size="sm"
+                @click="goToPage(page)"
+                class="h-8 w-8 p-0">
+                {{ page }}
+              </Button>
+            </PaginationItem>
+            <PaginationItem
+              v-else-if="
+                (page === currentPage - 2 && currentPage > 3) ||
+                (page === currentPage + 2 && currentPage < totalPages - 2)
+              "
+              :value="page">
+              <PaginationEllipsis />
+            </PaginationItem>
+          </template>
 
-        <PaginationNext
-          @click="goToNextPage"
-          :disabled="currentPage >= totalPages"
-          class="gap-1 pr-2.5"
-        >
-          <span class="hidden sm:block">下一页</span>
-          <ChevronRightIcon class="h-4 w-4" />
-        </PaginationNext>
-      </div>
+          <PaginationNext
+            @click="goToNextPage"
+            :disabled="currentPage >= totalPages"
+            class="gap-1 pr-2.5">
+            <span class="hidden sm:block">下一页</span>
+            <ChevronRightIcon class="h-4 w-4" />
+          </PaginationNext>
+        </div>
       </div>
     </div>
 
