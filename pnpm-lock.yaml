@@ -54,8 +54,8 @@ importers:
         specifier: ^3.5.24
         version: 3.5.24(typescript@5.9.3)
       vue-renderer-markdown:
-        specifier: 0.0.62-beta.6
-        version: 0.0.62-beta.6(vue@3.5.24(typescript@5.9.3))
+        specifier: 0.0.62
+        version: 0.0.62(vue@3.5.24(typescript@5.9.3))
       vue-router:
         specifier: ^4.6.3
         version: 4.6.3(vue@3.5.24(typescript@5.9.3))
@@ -1147,8 +1147,8 @@ packages:
   std-env@3.10.0:
     resolution: {integrity: sha512-5GS12FdOZNliM5mAOxFRg7Ir0pWz8MdpYm6AY6VPkGpbA7ZzmbzNcBJQ0GPvvyWgcY7QAhCgf9Uy89I03faLkg==}
 
-  stream-markdown-parser@0.0.25:
-    resolution: {integrity: sha512-B1jp4x6xHE2E6hyUcV7ZAtKBy3K71CnsZ3tP6eqILhXjC6lq8E/AQogF4r8apMwckDwCxLs9vBwUCx2ZEuKoMw==}
+  stream-markdown-parser@0.0.28:
+    resolution: {integrity: sha512-QHOJrRZ8gD/y9ZBuNHgLYo6bh/cngfEGPpSamO7VrCVR+CrTrPjSeYhRGy44jpHv/f71W6emaUat7lNes0TWyQ==}
 
   superjson@2.2.5:
     resolution: {integrity: sha512-zWPTX96LVsA/eVYnqOM2+ofcdPqdS1dAF1LN4TS2/MWuUpfitd9ctTa87wt4xrYnZnkLtS69xpBdSxVBP5Rm6w==}
@@ -1291,8 +1291,8 @@ packages:
       '@vue/composition-api':
         optional: true
 
-  vue-renderer-markdown@0.0.62-beta.6:
-    resolution: {integrity: sha512-ypGuP2MWeuWPSDMKRkumkK2i90+hIiNe0XobdbJ5/A3bKbKuggQzhnClokW4JpcM8mlUZp3y+f1QoVeCcvC2qw==}
+  vue-renderer-markdown@0.0.62:
+    resolution: {integrity: sha512-zav0x2vcJXx0VYIZwS7/pd+/duYa7PdaG4JkUpGAT/GzXzovSXkIS/j3mIt2WcOgmSDGcZnVqCt8MGFNco94XQ==}
     peerDependencies:
       katex: '>=0.16.22'
       mermaid: '>=11'
@@ -2355,7 +2355,7 @@ snapshots:
 
   std-env@3.10.0: {}
 
-  stream-markdown-parser@0.0.25:
+  stream-markdown-parser@0.0.28:
     dependencies:
       markdown-it-container: 4.0.0
       markdown-it-emoji: 3.0.0
@@ -2509,10 +2509,10 @@ snapshots:
     dependencies:
       vue: 3.5.24(typescript@5.9.3)
 
-  vue-renderer-markdown@0.0.62-beta.6(vue@3.5.24(typescript@5.9.3)):
+  vue-renderer-markdown@0.0.62(vue@3.5.24(typescript@5.9.3)):
     dependencies:
       '@floating-ui/dom': 1.7.4
-      stream-markdown-parser: 0.0.25
+      stream-markdown-parser: 0.0.28
       vue: 3.5.24(typescript@5.9.3)
 
   vue-router@4.6.3(vue@3.5.24(typescript@5.9.3)):
