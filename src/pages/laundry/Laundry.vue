@@ -142,11 +142,6 @@
           </Card>
         </div>
       </div>
-
-      <div class="ai w-full">
-        <MarkdownRender :content="content" />
-        <Button @click="ask" class="mt-4">AI</Button>
-      </div>
     </div>
 
     <Empty v-else-if="!loading && form.positionId && form.floorCode" class="max-w-md mx-auto">
@@ -191,19 +186,7 @@ import {
   type payload,
   type DeviceItem
 } from '@/api/laundry';
-import MarkdownRender from 'vue-renderer-markdown';
-import { chat } from '@/api/opeai';
 
-const content = ref('');
-
-async function ask() {
-  content.value = '';
-  const stream = await chat([{ role: 'user', content: '你推荐我使用哪台洗衣机?' }]);
-  for await (const chunk of stream) {
-    const delta = chunk.choices[0]?.delta;
-    if (delta?.content) content.value += delta.content;
-  }
-}
 const positions = [
   { id: 27958, name: '东校区三号公寓' },
   { id: 27956, name: '东校区一号公寓A座' },
