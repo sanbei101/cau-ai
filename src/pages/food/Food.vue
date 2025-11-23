@@ -32,15 +32,8 @@ import {
   PaginationPrevious
 } from '@/components/ui/pagination';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetFooter
-} from '@/components/ui/sheet';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Textarea } from '@/components/ui/textarea';
 import {
   getDishList,
   type Dish,
@@ -63,7 +56,6 @@ const totalItems = ref(0);
 const totalPages = computed(() => Math.ceil(totalItems.value / pageSize.value));
 
 // AI Chat Logic
-const isAiOpen = ref(false);
 const aiInput = ref('');
 const aiMessages = ref<{ role: 'user' | 'assistant'; content: string }[]>([
   {
@@ -75,9 +67,9 @@ const aiLoading = ref(false);
 
 const scrollToBottom = async () => {
   await nextTick();
-  const container = document.getElementById('ai-chat-container');
-  if (container) {
-    container.scrollTop = container.scrollHeight;
+  const viewport = document.querySelector('[data-radix-scroll-area-viewport]');
+  if (viewport) {
+    viewport.scrollTop = viewport.scrollHeight;
   }
 };
 
@@ -229,243 +221,254 @@ onMounted(() => {
 
 <template>
   <div class="container mx-auto p-6 max-w-7xl">
-    <div class="mb-8 flex justify-between items-end">
-      <div>
-        <div class="flex items-center gap-3 mb-2">
-          <Utensils class="h-8 w-8 text-primary" />
-          <h1 class="text-3xl font-bold">食堂菜品</h1>
-        </div>
-        <p class="text-muted-foreground">浏览和搜索各个食堂的菜品信息</p>
+    <div class="mb-8">
+      <div class="flex items-center gap-3 mb-2">
+        <Utensils class="h-8 w-8 text-primary" />
+        <h1 class="text-3xl font-bold">食堂菜品</h1>
       </div>
+      <p class="text-muted-foreground">浏览和搜索各个食堂的菜品信息</p>
+    </div>
 
-      <Sheet v-model:open="isAiOpen">
-        <SheetTrigger as-child>
-          <Button class="gap-2">
-            <Bot class="h-4 w-4" />
-            AI 推荐
-          </Button>
-        </SheetTrigger>
-        <SheetContent class="flex flex-col h-full sm:max-w-[400px]">
-          <SheetHeader>
-            <SheetTitle>AI 美食助手</SheetTitle>
-            <SheetDescription> 不知道吃什么？让我来为你推荐！ </SheetDescription>
-          </SheetHeader>
-
-          <div class="flex-1 overflow-y-auto py-4 space-y-4 pr-2" id="ai-chat-container">
-            <!-- Messages -->
-            <div
-              v-for="(msg, index) in aiMessages"
-              :key="index"
-              :class="['flex gap-3', msg.role === 'user' ? 'flex-row-reverse' : '']">
-              <div
-                :class="[
-                  'h-8 w-8 rounded-full flex items-center justify-center shrink-0',
-                  msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
-                ]">
-                <User v-if="msg.role === 'user'" class="h-5 w-5" />
-                <Bot v-else class="h-5 w-5" />
-              </div>
-              <div
-                :class="[
-                  'rounded-lg p-3 text-sm max-w-[80%]',
-                  msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
-                ]">
-                {{ msg.content }}
-              </div>
-            </div>
-            <div v-if="aiLoading" class="flex gap-3">
-              <div class="h-8 w-8 rounded-full bg-muted flex items-center justify-center shrink-0">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+      <!-- AI Sidebar -->
+      <div class="lg:col-span-1 lg:col-start-4 row-start-1 row-end-1">
+        <div class="sticky top-6">
+          <Card class="flex flex-col h-[600px] border-primary/20 shadow-md">
+            <CardHeader>
+              <CardTitle class="flex items-center gap-2">
                 <Bot class="h-5 w-5" />
+                AI 美食助手
+              </CardTitle>
+              <CardDescription> 不知道吃什么？问问我吧！ </CardDescription>
+            </CardHeader>
+            <CardContent class="flex-1 p-0 overflow-hidden">
+              <ScrollArea class="h-full p-4" id="ai-chat-scroll-area">
+                <div class="space-y-4">
+                  <div
+                    v-for="(msg, index) in aiMessages"
+                    :key="index"
+                    :class="['flex gap-3', msg.role === 'user' ? 'flex-row-reverse' : '']">
+                    <div
+                      :class="[
+                        'h-8 w-8 rounded-full flex items-center justify-center shrink-0',
+                        msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                      ]">
+                      <User v-if="msg.role === 'user'" class="h-5 w-5" />
+                      <Bot v-else class="h-5 w-5" />
+                    </div>
+                    <div
+                      :class="[
+                        'rounded-lg p-3 text-sm max-w-[85%]',
+                        msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                      ]">
+                      {{ msg.content }}
+                    </div>
+                  </div>
+                  <div v-if="aiLoading" class="flex gap-3">
+                    <div
+                      class="h-8 w-8 rounded-full bg-muted flex items-center justify-center shrink-0">
+                      <Bot class="h-5 w-5" />
+                    </div>
+                    <div class="bg-muted rounded-lg p-3 text-sm">正在思考中...</div>
+                  </div>
+                </div>
+              </ScrollArea>
+            </CardContent>
+            <div class="p-4 border-t bg-background">
+              <div class="flex flex-col gap-2">
+                <Textarea
+                  v-model="aiInput"
+                  @keydown.enter.prevent="sendAiMessage"
+                  placeholder="输入你的口味..."
+                  :disabled="aiLoading"
+                  class="min-h-20 resize-none" />
+                <Button
+                  @click="sendAiMessage"
+                  class="w-full"
+                  :disabled="aiLoading || !aiInput.trim()">
+                  <Send class="h-4 w-4 mr-2" />
+                  发送
+                </Button>
               </div>
-              <div class="bg-muted rounded-lg p-3 text-sm">正在思考中...</div>
             </div>
-          </div>
+          </Card>
+        </div>
+      </div>
+      <!-- Main Content -->
+      <div class="lg:col-span-3 space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle class="flex items-center gap-2">
+              <Filter class="h-5 w-5" />
+              筛选条件
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="relative md:col-span-2">
+                <Search class="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input v-model="searchQuery" placeholder="搜索菜品名称..." class="pl-10" />
+              </div>
 
-          <SheetFooter class="pt-2">
-            <div class="flex w-full gap-2">
-              <Input
-                v-model="aiInput"
-                @keydown.enter="sendAiMessage"
-                placeholder="输入你的口味..."
-                :disabled="aiLoading" />
-              <Button @click="sendAiMessage" size="icon" :disabled="aiLoading || !aiInput.trim()">
-                <Send class="h-4 w-4" />
+              <Select v-model="selectedTag">
+                <SelectTrigger>
+                  <SelectValue placeholder="选择标签" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">全部标签</SelectItem>
+                  <SelectItem v-for="tag in availableTags" :key="tag" :value="tag">
+                    {{ tag }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select v-model="selectedCanteen">
+                <SelectTrigger>
+                  <SelectValue placeholder="选择食堂" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">全部食堂</SelectItem>
+                  <SelectItem v-for="canteen in availableCanteens" :key="canteen" :value="canteen">
+                    {{ canteen }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Button variant="outline" @click="resetFilters" class="md:col-span-2">
+                重置筛选
               </Button>
             </div>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
-    </div>
+          </CardContent>
+        </Card>
 
-    <Card class="mb-6">
-      <CardHeader>
-        <CardTitle class="flex items-center gap-2">
-          <Filter class="h-5 w-5" />
-          筛选条件
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div class="relative">
-            <Search class="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-            <Input v-model="searchQuery" placeholder="搜索菜品名称..." class="pl-10" />
+        <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div v-for="i in 6" :key="i" class="space-y-3">
+            <Skeleton class="h-32 w-full rounded-lg" />
+            <Skeleton class="h-6 w-3/4" />
+            <Skeleton class="h-4 w-1/2" />
+            <Skeleton class="h-4 w-full" />
+          </div>
+        </div>
+
+        <div v-else-if="error" class="flex justify-center py-12">
+          <div class="w-full">
+            <Alert variant="destructive" class="mb-4">
+              <AlertCircle />
+              <AlertDescription class="font-bold">
+                {{ error }}
+              </AlertDescription>
+            </Alert>
+            <div class="text-center">
+              <Button @click="fetchDishes" variant="outline" class="gap-2">
+                <span>重新加载</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div v-else-if="filteredDishes.length">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <Card
+              v-for="dish in filteredDishes"
+              :key="dish.id"
+              class="hover:shadow-lg transition-shadow duration-200">
+              <CardHeader class="pb-3">
+                <div class="flex justify-between items-start gap-2">
+                  <CardTitle class="text-lg leading-tight line-clamp-2">
+                    {{ dish.name }}
+                  </CardTitle>
+                  <Badge :class="getTagColor(dish.tag)" variant="secondary">
+                    {{ dish.tag }}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent class="pt-0">
+                <CardDescription class="text-sm">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="font-medium">食堂:</span>
+                    <span class="line-clamp-2">{{ formatCanteens(dish.canteen) }}</span>
+                  </div>
+                  <div class="flex flex-wrap gap-1">
+                    <Badge
+                      v-for="canteen in dish.canteen"
+                      :key="canteen"
+                      variant="outline"
+                      class="text-xs">
+                      {{ canteen }}
+                    </Badge>
+                  </div>
+                </CardDescription>
+              </CardContent>
+            </Card>
           </div>
 
-          <Select v-model="selectedTag">
-            <SelectTrigger>
-              <SelectValue placeholder="选择标签" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全部标签</SelectItem>
-              <SelectItem v-for="tag in availableTags" :key="tag" :value="tag">
-                {{ tag }}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select v-model="selectedCanteen">
-            <SelectTrigger>
-              <SelectValue placeholder="选择食堂" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全部食堂</SelectItem>
-              <SelectItem v-for="canteen in availableCanteens" :key="canteen" :value="canteen">
-                {{ canteen }}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Button variant="outline" @click="resetFilters" class="w-full">重置筛选</Button>
-        </div>
-      </CardContent>
-    </Card>
-
-    <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <div v-for="i in 8" :key="i" class="space-y-3">
-        <Skeleton class="h-32 w-full rounded-lg" />
-        <Skeleton class="h-6 w-3/4" />
-        <Skeleton class="h-4 w-1/2" />
-        <Skeleton class="h-4 w-full" />
-      </div>
-    </div>
-
-    <div v-else-if="error" class="flex justify-center py-12">
-      <div class="w-full">
-        <Alert variant="destructive" class="mb-4">
-          <AlertCircle />
-          <AlertDescription class="font-bold">
-            {{ error }}
-          </AlertDescription>
-        </Alert>
-        <div class="text-center">
-          <Button @click="fetchDishes" variant="outline" class="gap-2">
-            <span>重新加载</span>
-          </Button>
-        </div>
-      </div>
-    </div>
-
-    <div v-else-if="filteredDishes.length">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-        <Card
-          v-for="dish in filteredDishes"
-          :key="dish.id"
-          class="hover:shadow-lg transition-shadow duration-200">
-          <CardHeader class="pb-3">
-            <div class="flex justify-between items-start gap-2">
-              <CardTitle class="text-lg leading-tight line-clamp-2">
-                {{ dish.name }}
-              </CardTitle>
-              <Badge :class="getTagColor(dish.tag)" variant="secondary">
-                {{ dish.tag }}
-              </Badge>
+          <!-- 分页控件 -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-sm text-muted-foreground">
+              {{ getPaginationText() }}
             </div>
-          </CardHeader>
-          <CardContent class="pt-0">
-            <CardDescription class="text-sm">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="font-medium">食堂:</span>
-                <span class="line-clamp-2">{{ formatCanteens(dish.canteen) }}</span>
-              </div>
-              <div class="flex flex-wrap gap-1">
-                <Badge
-                  v-for="canteen in dish.canteen"
-                  :key="canteen"
-                  variant="outline"
-                  class="text-xs">
-                  {{ canteen }}
-                </Badge>
-              </div>
-            </CardDescription>
+
+            <Pagination
+              v-if="totalPages > 0"
+              :total="totalItems"
+              :items-per-page="pageSize"
+              :page="currentPage"
+              @update:page="(page) => goToPage(page)"
+              class="w-fit">
+              <PaginationContent>
+                <PaginationPrevious @click="goToPreviousPage" :disabled="currentPage <= 1">
+                  <ChevronLeftIcon />
+                  <span class="hidden sm:block">上一页</span>
+                </PaginationPrevious>
+
+                <template v-for="page in totalPages" :key="page">
+                  <PaginationItem
+                    v-if="
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1)
+                    "
+                    :value="page"
+                    :isActive="page === currentPage">
+                    <Button
+                      :variant="page === currentPage ? 'default' : 'outline'"
+                      size="sm"
+                      @click="goToPage(page)"
+                      class="h-8 w-8 p-0">
+                      {{ page }}
+                    </Button>
+                  </PaginationItem>
+                  <PaginationItem
+                    v-else-if="
+                      (page === currentPage - 2 && currentPage > 3) ||
+                      (page === currentPage + 2 && currentPage < totalPages - 2)
+                    "
+                    :value="page">
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                </template>
+
+                <PaginationNext @click="goToNextPage" :disabled="currentPage >= totalPages">
+                  <span class="hidden sm:block">下一页</span>
+                  <ChevronRightIcon />
+                </PaginationNext>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        </div>
+
+        <!-- 空状态 -->
+        <Card v-else class="text-center py-12">
+          <CardContent>
+            <div class="text-muted-foreground mb-4">
+              <Utensils class="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>没有找到符合条件的菜品</p>
+              <p class="text-sm">请尝试调整筛选条件</p>
+            </div>
+            <Button @click="resetFilters">重置筛选条件</Button>
           </CardContent>
         </Card>
       </div>
-
-      <!-- 分页控件 -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="text-sm text-muted-foreground">
-          {{ getPaginationText() }}
-        </div>
-
-        <Pagination
-          v-if="totalPages > 0"
-          :total="totalItems"
-          :items-per-page="pageSize"
-          :page="currentPage"
-          @update:page="(page) => goToPage(page)"
-          class="w-fit">
-          <PaginationContent>
-            <PaginationPrevious @click="goToPreviousPage" :disabled="currentPage <= 1">
-              <ChevronLeftIcon />
-              <span class="hidden sm:block">上一页</span>
-            </PaginationPrevious>
-
-            <template v-for="page in totalPages" :key="page">
-              <PaginationItem
-                v-if="
-                  page === 1 ||
-                  page === totalPages ||
-                  (page >= currentPage - 1 && page <= currentPage + 1)
-                "
-                :value="page"
-                :isActive="page === currentPage">
-                <Button
-                  :variant="page === currentPage ? 'default' : 'outline'"
-                  size="sm"
-                  @click="goToPage(page)"
-                  class="h-8 w-8 p-0">
-                  {{ page }}
-                </Button>
-              </PaginationItem>
-              <PaginationItem
-                v-else-if="
-                  (page === currentPage - 2 && currentPage > 3) ||
-                  (page === currentPage + 2 && currentPage < totalPages - 2)
-                "
-                :value="page">
-                <PaginationEllipsis />
-              </PaginationItem>
-            </template>
-
-            <PaginationNext @click="goToNextPage" :disabled="currentPage >= totalPages">
-              <span class="hidden sm:block">下一页</span>
-              <ChevronRightIcon />
-            </PaginationNext>
-          </PaginationContent>
-        </Pagination>
-      </div>
     </div>
-
-    <!-- 空状态 -->
-    <Card v-else class="text-center py-12">
-      <CardContent>
-        <div class="text-muted-foreground mb-4">
-          <Utensils class="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <p>没有找到符合条件的菜品</p>
-          <p class="text-sm">请尝试调整筛选条件</p>
-        </div>
-        <Button @click="resetFilters">重置筛选条件</Button>
-      </CardContent>
-    </Card>
   </div>
 </template>
