@@ -90,7 +90,7 @@ const sendAiMessage = async () => {
       .join('\n');
 
     const response = await client.chat.completions.create({
-      model: 'Qwen/Qwen2.5-Coder-7B-Instruct',
+      model: 'Qwen/Qwen2.5-7B-Instruct',
       messages: [
         {
           role: 'system',
