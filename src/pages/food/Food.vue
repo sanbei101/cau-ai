@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, nextTick } from 'vue';
 import {
   Search,
   Filter,
   Utensils,
   ChevronLeftIcon,
   ChevronRightIcon,
-  AlertCircle
+  AlertCircle,
+  Bot,
+  Send,
+  User
 } from 'lucide-vue-next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -30,12 +33,22 @@ import {
 } from '@/components/ui/pagination';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetFooter
+} from '@/components/ui/sheet';
+import {
   getDishList,
   type Dish,
   getAvailableTags,
   getAvailableCanteens,
   filterDishes
 } from '@/api/food';
+import { client } from '@/api/opeai';
 
 const dishes = ref<Dish[]>([]);
 const loading = ref(true);
@@ -48,6 +61,72 @@ const currentPage = ref(1);
 const pageSize = ref(12);
 const totalItems = ref(0);
 const totalPages = computed(() => Math.ceil(totalItems.value / pageSize.value));
+
+// AI Chat Logic
+const isAiOpen = ref(false);
+const aiInput = ref('');
+const aiMessages = ref<{ role: 'user' | 'assistant'; content: string }[]>([
+  {
+    role: 'assistant',
+    content: '你好！我是你的食堂美食助手,告诉我你想吃什么,或者你的口味偏好,我来为你推荐！'
+  }
+]);
+const aiLoading = ref(false);
+
+const scrollToBottom = async () => {
+  await nextTick();
+  const container = document.getElementById('ai-chat-container');
+  if (container) {
+    container.scrollTop = container.scrollHeight;
+  }
+};
+
+const sendAiMessage = async () => {
+  if (!aiInput.value.trim() || aiLoading.value) return;
+
+  const userMessage = aiInput.value;
+  aiMessages.value.push({ role: 'user', content: userMessage });
+  aiInput.value = '';
+  aiLoading.value = true;
+  scrollToBottom();
+
+  try {
+    // Get all dishes for context
+    const allDishesResponse = await getDishList({ page: 1, page_size: 1000 });
+    const dishesContext = allDishesResponse.data.list
+      .map((d) => `- ${d.name} (${d.tag}, 食堂: ${d.canteen.join(', ')})`)
+      .join('\n');
+
+    const response = await client.chat.completions.create({
+      model: 'Qwen/Qwen2.5-Coder-7B-Instruct',
+      messages: [
+        {
+          role: 'system',
+          content: `你是一个大学食堂的美食推荐助手。
+          
+          以下是今天供应的菜品列表：
+          ${dishesContext}
+          
+          请根据用户的输入推荐合适的菜品。
+          如果用户没有明确需求，可以推荐一些特色菜。
+          回答要亲切、幽默，像个懂吃的朋友。
+          推荐时请注明菜品所在的食堂。
+          `
+        },
+        ...aiMessages.value.map((m) => ({ role: m.role, content: m.content }))
+      ]
+    });
+
+    const reply = response.choices[0]?.message?.content || '抱歉，我暂时无法思考了...';
+    aiMessages.value.push({ role: 'assistant', content: reply });
+  } catch (err) {
+    console.error('AI Error:', err);
+    aiMessages.value.push({ role: 'assistant', content: '抱歉,连接AI助手时出现了一些问题' });
+  } finally {
+    aiLoading.value = false;
+    scrollToBottom();
+  }
+};
 
 const fetchDishes = async () => {
   try {
@@ -150,12 +229,72 @@ onMounted(() => {
 
 <template>
   <div class="container mx-auto p-6 max-w-7xl">
-    <div class="mb-8">
-      <div class="flex items-center gap-3 mb-2">
-        <Utensils class="h-8 w-8 text-primary" />
-        <h1 class="text-3xl font-bold">食堂菜品</h1>
+    <div class="mb-8 flex justify-between items-end">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <Utensils class="h-8 w-8 text-primary" />
+          <h1 class="text-3xl font-bold">食堂菜品</h1>
+        </div>
+        <p class="text-muted-foreground">浏览和搜索各个食堂的菜品信息</p>
       </div>
-      <p class="text-muted-foreground">浏览和搜索各个食堂的菜品信息</p>
+
+      <Sheet v-model:open="isAiOpen">
+        <SheetTrigger as-child>
+          <Button class="gap-2">
+            <Bot class="h-4 w-4" />
+            AI 推荐
+          </Button>
+        </SheetTrigger>
+        <SheetContent class="flex flex-col h-full sm:max-w-[400px]">
+          <SheetHeader>
+            <SheetTitle>AI 美食助手</SheetTitle>
+            <SheetDescription> 不知道吃什么？让我来为你推荐！ </SheetDescription>
+          </SheetHeader>
+
+          <div class="flex-1 overflow-y-auto py-4 space-y-4 pr-2" id="ai-chat-container">
+            <!-- Messages -->
+            <div
+              v-for="(msg, index) in aiMessages"
+              :key="index"
+              :class="['flex gap-3', msg.role === 'user' ? 'flex-row-reverse' : '']">
+              <div
+                :class="[
+                  'h-8 w-8 rounded-full flex items-center justify-center shrink-0',
+                  msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                ]">
+                <User v-if="msg.role === 'user'" class="h-5 w-5" />
+                <Bot v-else class="h-5 w-5" />
+              </div>
+              <div
+                :class="[
+                  'rounded-lg p-3 text-sm max-w-[80%]',
+                  msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                ]">
+                {{ msg.content }}
+              </div>
+            </div>
+            <div v-if="aiLoading" class="flex gap-3">
+              <div class="h-8 w-8 rounded-full bg-muted flex items-center justify-center shrink-0">
+                <Bot class="h-5 w-5" />
+              </div>
+              <div class="bg-muted rounded-lg p-3 text-sm">正在思考中...</div>
+            </div>
+          </div>
+
+          <SheetFooter class="pt-2">
+            <div class="flex w-full gap-2">
+              <Input
+                v-model="aiInput"
+                @keydown.enter="sendAiMessage"
+                placeholder="输入你的口味..."
+                :disabled="aiLoading" />
+              <Button @click="sendAiMessage" size="icon" :disabled="aiLoading || !aiInput.trim()">
+                <Send class="h-4 w-4" />
+              </Button>
+            </div>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
 
     <Card class="mb-6">
