@@ -32,7 +32,7 @@
     "@types/papaparse": "^5.5.0",
     "@vitejs/plugin-vue": "^6.0.2",
     "@vue/tsconfig": "^0.8.1",
-    "oxlint": "^1.29.0",
+    "oxlint": "^1.30.0",
     "shadcn-vue": "^2.3.3",
     "typescript": "~5.9.3",
     "vite": "npm:rolldown-vite@latest",
