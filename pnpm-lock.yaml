@@ -61,8 +61,8 @@ importers:
         version: 4.6.3(vue@3.5.25(typescript@5.9.3))
     devDependencies:
       '@types/papaparse':
-        specifier: ^5.5.0
-        version: 5.5.0
+        specifier: ^5.5.1
+        version: 5.5.1
       '@vitejs/plugin-vue':
         specifier: ^6.0.2
         version: 6.0.2(rolldown-vite@7.2.9(@types/node@24.10.1)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))
@@ -670,8 +670,8 @@ packages:
   '@types/node@24.10.1':
     resolution: {integrity: sha512-GNWcUTRBgIRJD5zj+Tq0fKOJ5XZajIiBroOF0yvj2bSU1WvNdYS/dn9UxwsujGW4JX06dnHyjV2y9rRaybH0iQ==}
 
-  '@types/papaparse@5.5.0':
-    resolution: {integrity: sha512-GVs5iMQmUr54BAZYYkByv8zPofFxmyxUpISPb2oh8sayR3+1zbxasrOvoKiHJ/nnoq/uULuPsu1Lze1EkagVFg==}
+  '@types/papaparse@5.5.1':
+    resolution: {integrity: sha512-esEO+VISsLIyE+JZBmb89NzsYYbpwV8lmv2rPo6oX5y9KhBaIP7hhHgjuTut54qjdKVMufTEcrh5fUl9+58huw==}
 
   '@types/web-bluetooth@0.0.21':
     resolution: {integrity: sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==}
@@ -3279,7 +3279,7 @@ snapshots:
     dependencies:
       undici-types: 7.16.0
 
-  '@types/papaparse@5.5.0':
+  '@types/papaparse@5.5.1':
     dependencies:
       '@types/node': 24.10.1
 
