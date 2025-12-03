@@ -33,7 +33,7 @@
     "@vitejs/plugin-vue": "^6.0.2",
     "@vue/tsconfig": "^0.8.1",
     "oxlint": "^1.31.0",
-    "shadcn-vue": "^2.4.0",
+    "shadcn-vue": "^2.4.1",
     "typescript": "~5.9.3",
     "vite": "npm:rolldown-vite@latest",
     "vite-plugin-vue-devtools": "^8.0.5",
