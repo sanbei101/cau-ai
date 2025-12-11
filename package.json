@@ -11,7 +11,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.17",
+    "@tailwindcss/vite": "^4.1.18",
     "@vueuse/core": "^14.1.0",
     "alova": "^3.4.0",
     "class-variance-authority": "^0.7.1",
