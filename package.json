@@ -17,7 +17,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.561.0",
-    "openai": "^6.13.0",
+    "openai": "^6.14.0",
     "papaparse": "^5.5.3",
     "reka-ui": "^2.6.1",
     "tailwind-merge": "^3.4.0",
