@@ -13,7 +13,7 @@ importers:
     dependencies:
       '@tailwindcss/vite':
         specifier: ^4.1.18
-        version: 4.1.18(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
+        version: 4.1.18(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
       '@vueuse/core':
         specifier: ^14.1.0
         version: 14.1.0(vue@3.5.25(typescript@5.9.3))
@@ -27,8 +27,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       lucide-vue-next:
-        specifier: ^0.561.0
-        version: 0.561.0(vue@3.5.25(typescript@5.9.3))
+        specifier: ^0.562.0
+        version: 0.562.0(vue@3.5.25(typescript@5.9.3))
       openai:
         specifier: ^6.14.0
         version: 6.14.0(zod@3.25.76)
@@ -65,7 +65,7 @@ importers:
         version: 5.5.2
       '@vitejs/plugin-vue':
         specifier: ^6.0.3
-        version: 6.0.3(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))
+        version: 6.0.3(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))
       '@vue/tsconfig':
         specifier: ^0.8.1
         version: 0.8.1(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3))
@@ -80,10 +80,10 @@ importers:
         version: 5.9.3
       vite:
         specifier: npm:rolldown-vite@latest
-        version: rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
+        version: rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
       vite-plugin-vue-devtools:
         specifier: ^8.0.5
-        version: 8.0.5(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))
+        version: 8.0.5(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))
       vue-tsc:
         specifier: ^3.1.8
         version: 3.1.8(typescript@5.9.3)
@@ -1735,8 +1735,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-vue-next@0.561.0:
-    resolution: {integrity: sha512-c5HUckO0qHklVSOf/0vaSR3pEb8fYImRDCRDLde56uqS9js0D/e3RAvq0/YFWjkmyOBKCb0/IdskdoHZQEkT5g==}
+  lucide-vue-next@0.562.0:
+    resolution: {integrity: sha512-LN0BLGKMFulv0lnfK29r14DcngRUhIqdcaL0zXTt2o0oS9odlrjCGaU3/X9hIihOjjN8l8e+Y9G/famcNYaI7Q==}
     peerDependencies:
       vue: '>=3.0.1'
 
@@ -2144,6 +2144,46 @@ packages:
     peerDependencies:
       '@types/node': ^20.19.0 || >=22.12.0
       esbuild: ^0.25.0
+      jiti: '>=1.21.0'
+      less: ^4.0.0
+      sass: ^1.70.0
+      sass-embedded: ^1.70.0
+      stylus: '>=0.54.8'
+      sugarss: ^5.0.0
+      terser: ^5.16.0
+      tsx: ^4.8.1
+      yaml: ^2.4.2
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      esbuild:
+        optional: true
+      jiti:
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      sass-embedded:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+      tsx:
+        optional: true
+      yaml:
+        optional: true
+
+  rolldown-vite@7.3.0:
+    resolution: {integrity: sha512-5hI5NCJwKBGtzWtdKB3c2fOEpI77Iaa0z4mSzZPU1cJ/OqrGbFafm90edVCd7T9Snz+Sh09TMAv4EQqyVLzuEg==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^20.19.0 || >=22.12.0
+      esbuild: ^0.27.0
       jiti: '>=1.21.0'
       less: ^4.0.0
       sass: ^1.70.0
@@ -3207,12 +3247,12 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.1.18
       '@tailwindcss/oxide-win32-x64-msvc': 4.1.18
 
-  '@tailwindcss/vite@4.1.18(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))':
+  '@tailwindcss/vite@4.1.18(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))':
     dependencies:
       '@tailwindcss/node': 4.1.18
       '@tailwindcss/oxide': 4.1.18
       tailwindcss: 4.1.18
-      vite: rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
+      vite: rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
 
   '@tanstack/virtual-core@3.13.12': {}
 
@@ -3266,10 +3306,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-vue@6.0.3(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))':
+  '@vitejs/plugin-vue@6.0.3(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.53
-      vite: rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
+      vite: rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
       vue: 3.5.25(typescript@5.9.3)
 
   '@vitest/expect@4.0.16':
@@ -3384,14 +3424,14 @@ snapshots:
 
   '@vue/devtools-api@6.6.4': {}
 
-  '@vue/devtools-core@8.0.5(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))':
+  '@vue/devtools-core@8.0.5(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))':
     dependencies:
       '@vue/devtools-kit': 8.0.5
       '@vue/devtools-shared': 8.0.5
       mitt: 3.0.1
       nanoid: 5.1.6
       pathe: 2.0.3
-      vite-hot-client: 2.1.0(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
+      vite-hot-client: 2.1.0(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
       vue: 3.5.25(typescript@5.9.3)
     transitivePeerDependencies:
       - vite
@@ -4329,7 +4369,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-vue-next@0.561.0(vue@3.5.25(typescript@5.9.3)):
+  lucide-vue-next@0.562.0(vue@3.5.25(typescript@5.9.3)):
     dependencies:
       vue: 3.5.25(typescript@5.9.3)
 
@@ -4706,6 +4746,21 @@ snapshots:
       jiti: 2.6.1
       stylus: 0.57.0
 
+  rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0):
+    dependencies:
+      '@oxc-project/runtime': 0.101.0
+      fdir: 6.5.0(picomatch@4.0.3)
+      lightningcss: 1.30.2
+      picomatch: 4.0.3
+      postcss: 8.5.6
+      rolldown: 1.0.0-beta.53
+      tinyglobby: 0.2.15
+    optionalDependencies:
+      '@types/node': 25.0.2
+      fsevents: 2.3.3
+      jiti: 2.6.1
+      stylus: 0.57.0
+
   rolldown@1.0.0-beta.53:
     dependencies:
       '@oxc-project/types': 0.101.0
@@ -5058,17 +5113,17 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite-dev-rpc@1.1.0(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)):
+  vite-dev-rpc@1.1.0(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)):
     dependencies:
       birpc: 2.8.0
-      vite: rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
-      vite-hot-client: 2.1.0(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
+      vite: rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
+      vite-hot-client: 2.1.0(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
 
-  vite-hot-client@2.1.0(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)):
+  vite-hot-client@2.1.0(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)):
     dependencies:
-      vite: rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
+      vite: rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
 
-  vite-plugin-inspect@11.3.3(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)):
+  vite-plugin-inspect@11.3.3(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)):
     dependencies:
       ansis: 4.2.0
       debug: 4.4.3
@@ -5078,26 +5133,26 @@ snapshots:
       perfect-debounce: 2.0.0
       sirv: 3.0.2
       unplugin-utils: 0.3.1
-      vite: rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
-      vite-dev-rpc: 1.1.0(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
+      vite: rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
+      vite-dev-rpc: 1.1.0(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-vue-devtools@8.0.5(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3)):
+  vite-plugin-vue-devtools@8.0.5(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3)):
     dependencies:
-      '@vue/devtools-core': 8.0.5(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))
+      '@vue/devtools-core': 8.0.5(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))(vue@3.5.25(typescript@5.9.3))
       '@vue/devtools-kit': 8.0.5
       '@vue/devtools-shared': 8.0.5
       sirv: 3.0.2
-      vite: rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
-      vite-plugin-inspect: 11.3.3(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
-      vite-plugin-vue-inspector: 5.3.2(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
+      vite: rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
+      vite-plugin-inspect: 11.3.3(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
+      vite-plugin-vue-inspector: 5.3.2(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0))
     transitivePeerDependencies:
       - '@nuxt/kit'
       - supports-color
       - vue
 
-  vite-plugin-vue-inspector@5.3.2(rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)):
+  vite-plugin-vue-inspector@5.3.2(rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)):
     dependencies:
       '@babel/core': 7.28.5
       '@babel/plugin-proposal-decorators': 7.28.0(@babel/core@7.28.5)
@@ -5108,7 +5163,7 @@ snapshots:
       '@vue/compiler-dom': 3.5.25
       kolorist: 1.8.0
       magic-string: 0.30.21
-      vite: rolldown-vite@7.2.11(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
+      vite: rolldown-vite@7.3.0(@types/node@25.0.2)(jiti@2.6.1)(stylus@0.57.0)
     transitivePeerDependencies:
       - supports-color
 
